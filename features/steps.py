@@ -2,6 +2,24 @@ from lettuce import *
 import terraform_validate
 import os
 
+untaggable_resources = [
+    "route_table",
+    "elastic_beanstalk",
+    "security_group_rule",
+    "eip",
+    "nat_gateway",
+    "key_pair",
+    "lambda",
+    "iam",
+    "s3_bucket_notification",
+    "api_gateway",
+    "cloudfront_origin_access_identity",
+    "cloudwatch",
+    "server_certificate",
+    "route53_record",
+    "directory_service_directory"
+]
+
 encryption_property = {
     "aws_db_instance": "storage_encrypted",
     "ebs_block_device": "encrypted",
@@ -11,7 +29,8 @@ encryption_property = {
 resource_name = {
     "RDS instance": "aws_db_instance",
     "EC2 instance": "aws_instance",
-    "EBS volume": "aws_ebs_volume"
+    "EBS volume": "aws_ebs_volume",
+    "resource that supports tags": "aws_(?!{0}).*".format("|".join(untaggable_resources))
 }
 
 
@@ -21,7 +40,7 @@ def have_terraform_configuration(step):
     world.validator = terraform_validate.Validator(path)
 
 
-@step('I define .+ (.*)')
+@step('I define a (.*)')
 def define_a_resource(step, resource):
 
     if(resource in resource_name.keys()):
@@ -31,11 +50,11 @@ def define_a_resource(step, resource):
     world.resources = world.validator.resources(resource)
 
 
-@step('it contains .+ (.*)')
+@step('it contains a (.*)')
 def it_contains_a(step, property):
 
-    if(resource in resource_name.keys()):
-        resource = resource_name[resource]
+    if(property in resource_name.keys()):
+        property = resource_name[property]
 
     world.resource_type = property
     world.resources = world.resources.property(property)
@@ -46,3 +65,9 @@ def encryption_must_be_enabled(step):
     world.validator.error_if_property_missing()
     prop = encryption_property[world.resource_type]
     world.resources.property(prop).should_equal(True)
+
+
+@step(u'Then it must have the "([^"]*)" tag')
+def it_must_have_the_tag(step, tag):
+    world.validator.error_if_property_missing()
+    world.resources.property('tags').should_have_properties(tag)

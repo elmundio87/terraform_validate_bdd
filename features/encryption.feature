@@ -11,10 +11,10 @@ Feature: Resources should be encrypted
   Scenario: EC2 instance block devices
     Given I have terraform configuration
     When I define a EC2 instance
-    And it contains an ebs_block_device
+    And it contains a ebs_block_device
     Then encryption must be enabled
 
   Scenario: EBS volumes
     Given I have terraform configuration
-    When I define an EBS volume
+    When I define a EBS volume
     Then encryption must be enabled
