@@ -70,4 +70,10 @@ def encryption_must_be_enabled(step):
 @step(u'Then it must have the "([^"]*)" tag')
 def it_must_have_the_tag(step, tag):
     world.validator.error_if_property_missing()
+    world.tag = tag
     world.resources.property('tags').should_have_properties(tag)
+
+
+@step(u'And its value must be set by a variable')
+def and_its_value_must_be_set_by_a_variable(step):
+    world.resources.property('tags').property(world.tag).should_match_regex('\${var.(.*)}')

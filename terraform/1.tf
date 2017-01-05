@@ -1,7 +1,7 @@
 resource "aws_db_instance" "foo" {
   storage_encrypted = "True"
   tags {
-    Platform = "foo"
+    Platform = "${var.platform}"
     Name = "foo"
     Owner = "bar"
   }
@@ -13,7 +13,7 @@ resource "aws_instance" "foo" {
   }
 
   tags {
-    Platform = "bar"
+    Platform = "${var.platform}"
     Name = "bar"
     Owner = "bar"
   }
