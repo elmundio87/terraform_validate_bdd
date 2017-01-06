@@ -1,3 +1,3 @@
 #!/bin/bash
 pip install lettuce
-lettuce
+lettuce providers/aws
