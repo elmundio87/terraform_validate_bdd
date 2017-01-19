@@ -3,7 +3,7 @@ resource "aws_db_instance" "foo" {
   tags {
     Platform = "${var.platform}"
     Name = "${var.platform}_${var.environment}_foo"
-    Owner = "bar"
+    Owner = "${var.owner}"
     Environment = "${var.environment}"
   }
 }
@@ -16,7 +16,7 @@ resource "aws_instance" "foo" {
   tags {
     Platform = "${var.platform}"
     Name = "${var.platform}_${var.environment}_bar"
-    Owner = "bar"
+    Owner = "${var.owner}"
     Environment = "${var.environment}"
   }
 
