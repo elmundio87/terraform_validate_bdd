@@ -25,7 +25,8 @@ encryption_property = {
     "aws_db_instance": "storage_encrypted",
     "ebs_block_device": "encrypted",
     "aws_ebs_volume": "encrypted",
-    "azurerm_storage_account": "enable_blob_encryption"
+    "azurerm_storage_account": "enable_blob_encryption",
+    "azurerm_sql_database": "encryption"
 }
 
 resource_name = {
@@ -33,6 +34,7 @@ resource_name = {
     "AWS EC2 instance": "aws_instance",
     "AWS EBS volume": "aws_ebs_volume",
     "Azure Storage Account": "azurerm_storage_account",
+    "Azure SQL Database": "azurerm_sql_database",
     "resource that supports tags": "(?!{0}).*".format("|".join(untaggable_resources))
 }
 
