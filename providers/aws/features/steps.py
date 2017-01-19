@@ -33,6 +33,10 @@ resource_name = {
     "resource that supports tags": "aws_(?!{0}).*".format("|".join(untaggable_resources))
 }
 
+regex = {
+    "Name" : "^\${var.platform}_\${var.environment}_.*"
+}
+
 
 @step('I have terraform configuration')
 def have_terraform_configuration(step):
@@ -71,8 +75,14 @@ def encryption_must_be_enabled(step):
 def it_must_have_the_tag(step, tag):
     world.validator.error_if_property_missing()
     world.tag = tag
-    world.resources.property('tags').should_have_properties(tag)
-
+    world.properties = world.resources.property('tags')
+    world.properties.should_have_properties(tag)
+    
+@step(u'And its value must match the "([^"]*)" regex')
+def it_must_have_the_tag(step, regex_type):
+    world.validator.error_if_property_missing()
+    world.regex = regex[regex_type]
+    world.properties.property(regex_type).should_match_regex(world.regex)
 
 @step(u'And its value must be set by a variable')
 def and_its_value_must_be_set_by_a_variable(step):

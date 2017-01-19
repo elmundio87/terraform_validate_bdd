@@ -7,6 +7,7 @@ Feature: Resources should be properly tagged
     Given I have terraform configuration
     When I define a resource that supports tags
     Then it must have the "Name" tag
+    And its value must match the "Name" regex
 
   Scenario: Platform tag
     Given I have terraform configuration
@@ -18,3 +19,9 @@ Feature: Resources should be properly tagged
     Given I have terraform configuration
     When I define a resource that supports tags
     Then it must have the "Owner" tag
+    
+  Scenario: Environment tag
+    Given I have terraform configuration
+    When I define a resource that supports tags
+    Then it must have the "Environment" tag
+    And its value must be set by a variable
