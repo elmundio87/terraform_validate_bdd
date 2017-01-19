@@ -3,34 +3,37 @@ import terraform_validate
 import os
 
 untaggable_resources = [
-    "route_table",
-    "elastic_beanstalk",
-    "security_group_rule",
-    "eip",
-    "nat_gateway",
-    "key_pair",
-    "lambda",
-    "iam",
-    "s3_bucket_notification",
-    "api_gateway",
-    "cloudfront_origin_access_identity",
-    "cloudwatch",
-    "server_certificate",
-    "route53_record",
-    "directory_service_directory"
+    "aws_route_table",
+    "aws_elastic_beanstalk",
+    "aws_security_group_rule",
+    "aws_eip",
+    "aws_nat_gateway",
+    "aws_key_pair",
+    "aws_lambda",
+    "aws_iam",
+    "aws_s3_bucket_notification",
+    "aws_api_gateway",
+    "aws_cloudfront_origin_access_identity",
+    "aws_cloudwatch",
+    "aws_server_certificate",
+    "aws_route53_record",
+    "aws_directory_service_directory",
+    "azurerm_resource_group"
 ]
 
 encryption_property = {
     "aws_db_instance": "storage_encrypted",
     "ebs_block_device": "encrypted",
-    "aws_ebs_volume": "encrypted"
+    "aws_ebs_volume": "encrypted",
+    "azurerm_storage_account": "enable_blob_encryption"
 }
 
 resource_name = {
-    "RDS instance": "aws_db_instance",
-    "EC2 instance": "aws_instance",
-    "EBS volume": "aws_ebs_volume",
-    "resource that supports tags": "aws_(?!{0}).*".format("|".join(untaggable_resources))
+    "AWS RDS instance": "aws_db_instance",
+    "AWS EC2 instance": "aws_instance",
+    "AWS EBS volume": "aws_ebs_volume",
+    "Azure Storage Account": "azurerm_storage_account",
+    "resource that supports tags": "(?!{0}).*".format("|".join(untaggable_resources))
 }
 
 regex = {
@@ -38,9 +41,9 @@ regex = {
 }
 
 
-@step('I have terraform configuration')
-def have_terraform_configuration(step):
-    path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../terraform")
+@step('I have terraform configuration at "([^"]*)"')
+def have_terraform_configuration(step, path):
+    path = os.path.join(os.path.dirname(os.path.realpath(__file__)), path)
     world.validator = terraform_validate.Validator(path)
 
 
