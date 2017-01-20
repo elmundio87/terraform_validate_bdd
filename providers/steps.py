@@ -39,7 +39,7 @@ resource_name = {
 }
 
 regex = {
-    "Name" : "^\${var.platform}_\${var.environment}_.*"
+    "Name": "^\${var.platform}_\${var.environment}_.*"
 }
 
 
@@ -82,12 +82,14 @@ def it_must_have_the_tag(step, tag):
     world.tag = tag
     world.properties = world.resources.property('tags')
     world.properties.should_have_properties(tag)
-    
+
+
 @step(u'And its value must match the "([^"]*)" regex')
 def it_must_have_the_tag(step, regex_type):
     world.validator.error_if_property_missing()
     world.regex = regex[regex_type]
     world.properties.property(regex_type).should_match_regex(world.regex)
+
 
 @step(u'And its value must be set by a variable')
 def and_its_value_must_be_set_by_a_variable(step):
