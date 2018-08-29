@@ -17,3 +17,8 @@ Examples include;
 I use a global steps.py file that is compatible with multiple cloud providers.
 
 If you want to add your own steps in a custom feature, refer to the [Lettuce documentation](http://lettuce.it/)
+
+## Usage
+
+1. Set up a python virtual environment and activate it
+2. Run `./test.sh`
